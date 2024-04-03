@@ -16,13 +16,16 @@ const extractNumber = (string) => {
 };
 extractNumber('2023 год');
 
+
 const myPadStart = (string, minLength, pad) => {
   let result = string;
   while (result.length < minLength) {
-    const newResultLength = result.length = pad.length;
-    const actualPad = newResultLength <= minLength ? pad : pad.slice(0, minLength - newResultLength);
-    result = actualPad + result;
+    const commonLength = result.length + pad.length;
+    const newPad = (commonLength > minLength) ? pad.substring(0, (commonLength - minLength)) : '';
+    result = (newPad !== '' ? newPad : pad) + result;
   }
+
   return result;
 };
-myPadStart();
+
+myPadStart('q', 4, 'we');
