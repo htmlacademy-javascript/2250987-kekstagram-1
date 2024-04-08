@@ -41,6 +41,7 @@ const getComments = () => {
 
   return comments;
 };
+//dfgdfg
 
 // функция addPhotos для создания массива фотографий с комментариями
 const photos = addPhotos();
