@@ -1,2 +1,3 @@
-import { addPhotos } from './data.js';
-addPhotos();
+// main.js
+import { renderThumbnails } from './render-thumbnails.js';
+renderThumbnails();
