@@ -1,3 +1,8 @@
+// big-picture.js
+
+let commentsShown = 0;
+const COMMENTS_TO_SHOW = 5;
+let comments = [];
 const body = document.querySelector('body');
 const bigPicture = document.querySelector('.big-picture');
 const bigPictureImg = bigPicture.querySelector('.big-picture__img img');
@@ -9,16 +14,16 @@ const socialCommentCount = bigPicture.querySelector('.social__comment-count');
 const commentsLoader = bigPicture.querySelector('.comments-loader');
 const pictureCancel = bigPicture.querySelector('#picture-cancel');
 
-let commentsShown = 0;
-const COMMENTS_TO_SHOW = 5;
-let comments = [];
-
+// Функция для отображения комментариев
 const renderComments = () => {
-  commentsShown += COMMENTS_TO_SHOW;
-  const currentComments = comments.slice(0, commentsShown);
-
+  // Сброс отображаемых комментариев при каждом вызове
   socialComments.innerHTML = '';
-  currentComments.forEach(({ avatar, message, name }) => {
+
+  // Обновление количества показанных комментариев
+  commentsShown = Math.min(commentsShown + COMMENTS_TO_SHOW, comments.length);
+
+  // Отображение комментариев
+  comments.slice(0, commentsShown).forEach(({ avatar, message, name }) => {
     const commentElement = document.createElement('li');
     commentElement.classList.add('social__comment');
 
@@ -39,15 +44,18 @@ const renderComments = () => {
     socialComments.appendChild(commentElement);
   });
 
-  socialCommentCount.textContent = `${currentComments.length} из ${comments.length} комментариев`;
+  // Обновление счетчика комментариев
+  socialCommentCount.innerHTML = `${commentsShown} из <span class="comments-count">${comments.length}</span> комментариев`;
 
-  if (currentComments.length >= comments.length) {
+  // Скрытие или отображение кнопки загрузки комментариев
+  if (commentsShown >= comments.length) {
     commentsLoader.classList.add('hidden');
   } else {
     commentsLoader.classList.remove('hidden');
   }
 };
 
+// Функция для открытия полноразмерного изображения
 const openBigPicture = ({ url, likes, comments: photoComments, description }) => {
   bigPictureImg.src = url;
   likesCount.textContent = likes;
@@ -58,6 +66,7 @@ const openBigPicture = ({ url, likes, comments: photoComments, description }) =>
   commentsShown = 0;
   renderComments();
 
+  // Отображение счетчика комментариев и кнопки загрузки
   socialCommentCount.classList.remove('hidden');
   commentsLoader.classList.remove('hidden');
 
@@ -67,12 +76,14 @@ const openBigPicture = ({ url, likes, comments: photoComments, description }) =>
   document.addEventListener('keydown', onEscPress);
 };
 
+// Функция для закрытия полноразмерного изображения
 const closeBigPicture = () => {
   bigPicture.classList.add('hidden');
   body.classList.remove('modal-open');
   document.removeEventListener('keydown', onEscPress);
 };
 
+// Обработчик нажатия клавиши Esc
 const onEscPress = (evt) => {
   if (evt.key === 'Escape' || evt.key === 'Esc') {
     evt.preventDefault();
@@ -80,10 +91,12 @@ const onEscPress = (evt) => {
   }
 };
 
+// Обработчик нажатия на кнопку загрузки комментариев
 commentsLoader.addEventListener('click', () => {
   renderComments();
 });
 
+// Обработчик нажатия на кнопку закрытия
 pictureCancel.addEventListener('click', closeBigPicture);
 
 export { openBigPicture };

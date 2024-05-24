@@ -1,8 +1,11 @@
 // main.js
 import { renderThumbnails } from './render-thumbnails.js';
 import { openBigPicture } from './big-picture.js';
+import { addPhotos } from './data.js';
 
 renderThumbnails();
+
+const photos = addPhotos();
 
 document.querySelector('.pictures').addEventListener('click', (evt) => {
   const picture = evt.target.closest('.picture');
@@ -10,17 +13,19 @@ document.querySelector('.pictures').addEventListener('click', (evt) => {
 
   evt.preventDefault();
 
-  const url = picture.querySelector('.picture__img').src;
-  const likes = picture.querySelector('.picture__likes').textContent;
-  const commentsCount = picture.querySelector('.picture__comments').textContent;
+  const pictureId = parseInt(picture.dataset.id, 10);
+  const photo = photos.find((p) => p.id === pictureId);
 
-  // Здесь должны быть данные о комментариях и описании, которые должны передаваться в функцию openBigPicture
-  // Поскольку их пока нет, использую случайные данные
-  const comments = [
-    { avatar: 'img/avatar-1.svg', message: 'Отличное фото!', name: 'Вася' },
-    { avatar: 'img/avatar-2.svg', message: 'Здорово!', name: 'Петя' },
-  ];
-  const description = 'Это описание фотографии';
-
-  openBigPicture({ url, likes, comments, description });
+  if (photo) {
+    openBigPicture({
+      url: photo.url,
+      likes: photo.likes,
+      comments: photo.comments.map(comment => ({
+        avatar: 'img/avatar-1.svg',
+        message: comment,
+        name: 'Автор'
+      })),
+      description: photo.description
+    });
+  }
 });

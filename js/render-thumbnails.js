@@ -1,16 +1,20 @@
-// renderThumbnails.js
+// render-thumbnails.js
 import { addPhotos } from './data.js';
-const photos = addPhotos();
+
 const picturesContainer = document.querySelector('.pictures');
 const pictureTemplate = document.querySelector('#picture').content.querySelector('.picture');
-const fragment = document.createDocumentFragment();
 
 const renderThumbnails = () => {
-  photos.forEach(({ url, likes, comments }) => {
+  const photos = addPhotos();
+  const fragment = document.createDocumentFragment();
+
+  photos.forEach((photo) => {
     const pictureElement = pictureTemplate.cloneNode(true);
-    pictureElement.querySelector('.picture__img').src = url;
-    pictureElement.querySelector('.picture__likes').textContent = likes;
-    pictureElement.querySelector('.picture__comments').textContent = comments.length;
+    pictureElement.querySelector('.picture__img').src = photo.url;
+    pictureElement.querySelector('.picture__likes').textContent = photo.likes;
+    pictureElement.querySelector('.picture__comments').textContent = photo.comments.length;
+    pictureElement.dataset.id = photo.id;
+
     fragment.appendChild(pictureElement);
   });
 
